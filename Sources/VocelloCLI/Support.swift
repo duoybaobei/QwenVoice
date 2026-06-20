@@ -63,9 +63,9 @@ enum CLIPaths {
     /// Resolve the runtime data directory the engine roots at (models/, cache/,
     /// outputs/, diagnostics/). Mirrors the app's AppPaths selection without
     /// depending on the app target: explicit --data-dir wins, else
-    /// QWENVOICE_APP_SUPPORT_DIR, else ~/Library/Application Support/QwenVoice
-    /// (or QwenVoice-Debug when QWENVOICE_DEBUG is truthy — matching the app so
-    /// the CLI shares the debug-isolated models/diagnostics during benchmarks).
+    /// QWENVOICE_APP_SUPPORT_DIR, else ~/Library/Application Support/QwenVoice-Local
+    /// (or QwenVoice-Local-Debug when QWENVOICE_DEBUG is truthy — matching the
+    /// app so the CLI shares the debug-isolated models/diagnostics during benchmarks).
     static func dataDirectory(override: String?) -> URL {
         if let override, !override.isEmpty {
             return URL(fileURLWithPath: (override as NSString).expandingTildeInPath, isDirectory: true)
@@ -76,7 +76,7 @@ enum CLIPaths {
             return URL(fileURLWithPath: explicit, isDirectory: true)
         }
         let debug = (env["QWENVOICE_DEBUG"]?.lowercased()).map { ["1", "true", "on", "yes"].contains($0) } ?? false
-        let folder = debug ? "QwenVoice-Debug" : "QwenVoice"
+        let folder = debug ? "QwenVoice-Local-Debug" : "QwenVoice-Local"
         let base = FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask).first
             ?? URL(fileURLWithPath: (NSHomeDirectory() as NSString)

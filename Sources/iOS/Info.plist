@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>zh-Hans</string>
 	<key>CFBundleDisplayName</key>
-	<string>Vocello</string>
+	<string>EchoTwin</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -41,9 +41,9 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Vocello records reference clips you use to clone voices on-device. Recordings stay on this iPhone.</string>
+	<string>EchoTwin 会录制你用于本机声音克隆的参考片段。录音只会保存在这台 iPhone 上。</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Vocello transcribes your reference recording on-device to improve clone quality. Audio never leaves your iPhone.</string>
+	<string>EchoTwin 会在设备上转写参考录音，以提升克隆质量。音频不会离开这台 iPhone。</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>

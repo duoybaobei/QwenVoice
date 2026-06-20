@@ -158,7 +158,7 @@ enum BatchCommand {
           --play         play each result with afplay when done
           --json         emit a JSON summary on stdout instead of one path per line
           --quiet|--verbose   suppress / expand stderr progress notes
-          --data-dir     runtime dir (default ~/Library/Application Support/QwenVoice[-Debug])
+          --data-dir     runtime dir (default ~/Library/Application Support/QwenVoice-Local[-Debug])
           --manifest     override path to qwenvoice_contract.json
 
         Prints one output WAV path per line on stdout (or a JSON object with --json).

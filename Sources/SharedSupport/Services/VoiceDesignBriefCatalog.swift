@@ -31,15 +31,15 @@ enum VoiceDesignBriefCatalog {
     /// "deep narrator" can come out high-pitched. Concrete, gendered defaults
     /// keep that tail tight.
     static let startingPoints = [
-        "A deep, low-pitched male narrator, warm and bass-resonant, with a subtle British accent.",
-        "A bright young woman, energetic and conversational.",
-        "A gravelly, low-pitched older man, slow and intimate, late-night radio.",
-        "A soft, breathy young woman, gentle and reassuring.",
-        "A calm middle-aged male voice with slow pace and a deep, magnetic tone, ideal for documentary narration.",
-        "A lively young female voice with fast pace and upward intonation, suited to upbeat product videos.",
-        "A cute child's voice, around eight years old, slightly mischievous, suited to animated characters.",
-        "A teenage male voice, tenor range, gaining confidence, though the vowels still tighten when he is nervous.",
+        "一位低沉男声旁白，温暖、有低频共鸣，带轻微英式口音。",
+        "一位明亮的年轻女声，充满活力，像日常对话一样自然。",
+        "一位沙哑低沉的年长男声，语速缓慢、亲密，像深夜电台。",
+        "一位柔和带气声的年轻女声，温柔且让人安心。",
+        "一位沉稳的中年男声，语速慢，音色深沉有磁性，适合纪录片旁白。",
+        "一位活泼年轻女声，语速快、语调上扬，适合轻快的产品视频。",
+        "一个约八岁、可爱又有点调皮的童声，适合动画角色。",
+        "一位少年男声，男高音区，逐渐变得自信，但紧张时元音仍会收紧。",
     ]
 
-    static let placeholder = "A warm, deep male narrator with a low, resonant tone and a subtle British accent."
+    static let placeholder = "一位温暖、低沉、有共鸣的男声旁白，带轻微英式口音。"
 }

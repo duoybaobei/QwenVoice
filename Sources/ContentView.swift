@@ -23,6 +23,23 @@ enum SidebarItem: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    var displayTitle: String {
+        switch self {
+        case .customVoice:
+            return "自定义声音"
+        case .voiceDesign:
+            return "声音设计"
+        case .voiceCloning:
+            return "声音克隆"
+        case .history:
+            return "历史记录"
+        case .voices:
+            return "已保存声音"
+        case .settings:
+            return "设置"
+        }
+    }
+
     var accessibilityID: String { "sidebar_\(String(describing: self))" }
 
     var screenAccessibilityID: String {
@@ -76,6 +93,17 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         case generate = "Generate"
         case library = "Library"
         case settings = "Settings"
+
+        var displayTitle: String {
+            switch self {
+            case .generate:
+                return "生成"
+            case .library:
+                return "资料库"
+            case .settings:
+                return "设置"
+            }
+        }
 
         var accessibilityID: String {
             "sidebarSection_\(String(describing: self))"
@@ -154,7 +182,7 @@ struct ContentView: View {
     @State private var engineLifecycleCoordinator = MacEngineServiceLifecycleCoordinator()
 
     private var currentWindowTitle: String {
-        selectedItem?.rawValue ?? "Vocello"
+        selectedItem?.displayTitle ?? "EchoTwin"
     }
 
     private var currentActiveScreenID: String {

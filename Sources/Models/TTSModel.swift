@@ -11,8 +11,8 @@ enum TTSModelVariantKind: String, CaseIterable, Codable, Hashable, Sendable {
         switch self {
         case .compactSpeed: return "Lite"
         case .compactQuality: return "Lite+"
-        case .speed: return "Speed"
-        case .quality: return "Quality"
+        case .speed: return "速度"
+        case .quality: return "质量"
         }
     }
 
@@ -26,7 +26,7 @@ enum TTSModelVariantKind: String, CaseIterable, Codable, Hashable, Sendable {
     }
 
     var variantLabel: String {
-        "\(displayName) variant"
+        "\(displayName)版本"
     }
 }
 
@@ -161,9 +161,9 @@ enum GenerationMode: String, CaseIterable, Codable, Hashable, Sendable {
 
     var displayName: String {
         switch self {
-        case .custom: return "Custom Voice"
-        case .design: return "Voice Design"
-        case .clone: return "Voice Cloning"
+        case .custom: return "自定义声音"
+        case .design: return "声音设计"
+        case .clone: return "声音克隆"
         }
     }
 

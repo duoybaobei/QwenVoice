@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Unified local build entrypoint for QwenVoice / Vocello.
+# Unified local build entrypoint for QwenVoice / EchoTwin.
 #
 # Single shippable config: there is no separate Debug config. This builds the
 # Release config UNOPTIMIZED (-Onone) for a fast local loop; scripts/release.sh
@@ -22,7 +22,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPT_DIR="$ROOT_DIR/scripts"
 
-APP_NAME="Vocello"
+APP_NAME="EchoTwin"
 SCHEME_NAME="QwenVoice"
 BUNDLE_ID="com.qwenvoice.app"
 DESTINATION="platform=macOS,arch=arm64"

@@ -117,7 +117,7 @@ struct IOSCustomVoiceSetupCard: View {
     }
 
     private var deliveryField: some View {
-        IOSInlineSetupField(title: "Delivery") {
+        IOSInlineSetupField(title: "Delivery（语气）") {
             IOSDeliveryPicker(
                 delivery: $delivery,
                 tint: IOSBrandTheme.custom,
@@ -175,7 +175,7 @@ struct IOSVoiceDesignSetupCard: View {
     }
 
     private var deliveryField: some View {
-        IOSInlineSetupField(title: "Delivery") {
+        IOSInlineSetupField(title: "Delivery（语气）") {
             IOSDeliveryPicker(
                 delivery: $delivery,
                 tint: IOSBrandTheme.design,

@@ -323,7 +323,7 @@ enum GenerateCommand {
           --play         play the result with afplay when done
           --json         emit a JSON result object on stdout instead of the bare path
           --quiet|--verbose   suppress / expand stderr progress notes
-          --data-dir     runtime dir (default ~/Library/Application Support/QwenVoice[-Debug])
+          --data-dir     runtime dir (default ~/Library/Application Support/QwenVoice-Local[-Debug])
           --manifest     override path to qwenvoice_contract.json
 
         Prints the output WAV path on stdout (or a JSON object with --json).

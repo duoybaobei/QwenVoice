@@ -237,15 +237,15 @@ struct BatchGenerationItemState: Identifiable, Equatable {
     var statusLabel: String {
         switch status {
         case .pending:
-            return "Pending"
+            return "等待中"
         case .running:
-            return "Running"
+            return "生成中"
         case .saved:
-            return "Saved"
+            return "已保存"
         case .failed:
-            return "Failed"
+            return "失败"
         case .cancelled:
-            return "Cancelled"
+            return "已取消"
         }
     }
 

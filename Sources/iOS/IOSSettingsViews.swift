@@ -94,10 +94,10 @@ private struct IOSSettingsView: View {
                         }
                     }
 
-                    IOSSettingsReferenceSection(title: "Settings") {
+                    IOSSettingsReferenceSection(title: "设置") {
                         IOSSettingsReferenceToggleRow(
                             symbol: "play.fill",
-                            title: "Autoplay after generate",
+                            title: "生成后自动播放",
                             accessibilityIdentifier: "iosSettings_autoPlayToggle",
                             isOn: $autoPlay,
                             tint: IOSBrandTheme.accent
@@ -898,16 +898,16 @@ private struct IOSModelRow: View {
             case .checking:
                 ProgressView()
             case .notInstalled:
-                installButton(title: "Install", accessibilityIdentifier: "iosModelDownload_\(model.id)")
+                installButton(title: "安装", accessibilityIdentifier: "iosModelDownload_\(model.id)")
             case .incomplete, .error:
-                installButton(title: "Repair", action: onInstall, accessibilityIdentifier: "iosModelRepair_\(model.id)")
+                installButton(title: "修复", action: onInstall, accessibilityIdentifier: "iosModelRepair_\(model.id)")
             }
         case .installed:
             installedControls
         case .available:
-            installButton(title: "Install", accessibilityIdentifier: "iosModelDownload_\(model.id)")
+            installButton(title: "安装", accessibilityIdentifier: "iosModelDownload_\(model.id)")
         case .downloading, .interrupted, .resuming, .restarting:
-            installButton(title: "Cancel", action: onCancel, accessibilityIdentifier: "iosModelCancel_\(model.id)")
+            installButton(title: "取消", action: onCancel, accessibilityIdentifier: "iosModelCancel_\(model.id)")
         case .verifying, .installing, .deleting:
             ProgressView()
         case .unavailable:
@@ -915,7 +915,7 @@ private struct IOSModelRow: View {
                 installedControls
             }
         case .failed:
-            installButton(title: "Retry", action: onInstall, accessibilityIdentifier: "iosModelRetry_\(model.id)")
+            installButton(title: "重试", action: onInstall, accessibilityIdentifier: "iosModelRetry_\(model.id)")
         }
     }
 

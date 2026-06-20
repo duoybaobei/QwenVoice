@@ -92,7 +92,7 @@ struct IOSDeliveryPickerSheet: View {
     }
 
     var body: some View {
-        IOSBottomSheetSurface(title: "Delivery", tint: tint, presentation: presentation, onDismiss: onDismiss) {
+        IOSBottomSheetSurface(title: "Delivery（语气）", tint: tint, presentation: presentation, onDismiss: onDismiss) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 18) {
                     LazyVGrid(columns: columns, spacing: 12) {
@@ -103,7 +103,7 @@ struct IOSDeliveryPickerSheet: View {
 
                     if canChooseIntensity {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Intensity")
+                            Text("Intensity（强度）")
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(IOSAppTheme.textPrimary)
                             HStack(spacing: 8) {
@@ -457,7 +457,7 @@ struct IOSVoicePickerSheet: View {
 
     /// Filter chip row, including the leading "All" chip.
     private var availableFilters: [(id: String, label: String)] {
-        var out: [(id: String, label: String)] = [(IOSVoicePickerSheet.allFilterID, "All")]
+        var out: [(id: String, label: String)] = [(IOSVoicePickerSheet.allFilterID, "全部")]
         for tag in distinctLanguageTags {
             out.append((tag, IOSVoicePickerSheet.label(for: tag)))
         }
@@ -466,16 +466,16 @@ struct IOSVoicePickerSheet: View {
 
     private static func label(for tag: String) -> String {
         switch tag {
-        case "EN":    return "English"
-        case "EN-UK": return "British"
-        case "ZH":    return "Chinese"
-        case "JA":    return "Japanese"
-        case "KO":    return "Korean"
-        case "ES":    return "Spanish"
-        case "FR":    return "French"
-        case "DE":    return "German"
-        case "IT":    return "Italian"
-        case "PT":    return "Portuguese"
+        case "EN":    return "英语"
+        case "EN-UK": return "英式英语"
+        case "ZH":    return "中文"
+        case "JA":    return "日语"
+        case "KO":    return "韩语"
+        case "ES":    return "西班牙语"
+        case "FR":    return "法语"
+        case "DE":    return "德语"
+        case "IT":    return "意大利语"
+        case "PT":    return "葡萄牙语"
         default:      return tag    // unknown tag → render verbatim
         }
     }
@@ -1085,7 +1085,7 @@ struct IOSModelInstallSheet: View {
                     .buttonStyle(.plain)
             } else {
                 IOSPrimaryCTAButton(
-                    title: "Install",
+                    title: "安装",
                     symbol: "arrow.down.circle.fill",
                     tint: item.tint,
                     isEnabled: true,

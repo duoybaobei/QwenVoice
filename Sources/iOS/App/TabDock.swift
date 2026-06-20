@@ -217,10 +217,10 @@ extension IOSAppTab {
 
     var title: String {
         switch self {
-        case .studio: return "Studio"
-        case .voices: return "Voices"
-        case .history: return "History"
-        case .settings: return "Settings"
+        case .studio: return "创作"
+        case .voices: return "声音"
+        case .history: return "历史"
+        case .settings: return "设置"
         }
     }
 

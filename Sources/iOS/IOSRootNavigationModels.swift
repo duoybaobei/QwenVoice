@@ -19,9 +19,9 @@ enum IOSLibrarySection: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .history:
-            return "History"
+            return "历史"
         case .voices:
-            return "Voices"
+            return "声音"
         }
     }
 
@@ -60,11 +60,11 @@ enum IOSGenerationSection: String, CaseIterable, Identifiable {
         // the setup-chip pattern; the segmented control itself stays terse.
         switch self {
         case .custom:
-            return "Custom"
+            return "自定义"
         case .design:
-            return "Design"
+            return "设计"
         case .clone:
-            return "Clone"
+            return "克隆"
         }
     }
 }

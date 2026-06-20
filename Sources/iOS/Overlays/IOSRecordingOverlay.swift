@@ -61,7 +61,7 @@ struct IOSRecordingOverlay: View {
                 onCancel()
             }
         } message: {
-            Text("Vocello needs the microphone to record reference clips. Enable it in Settings to continue.")
+            Text("EchoTwin needs the microphone to record reference clips. Enable it in Settings to continue.")
         }
     }
 
@@ -217,7 +217,7 @@ struct IOSRecordingOverlay: View {
                 )
             } else {
                 IOSPrimaryCTAButton(
-                    title: "Record",
+                    title: "录制",
                     symbol: "mic.fill",
                     tint: IOSBrandTheme.clone,
                     isEnabled: !recorder.permissionDenied,

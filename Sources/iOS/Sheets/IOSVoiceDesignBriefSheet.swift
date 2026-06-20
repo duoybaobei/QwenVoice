@@ -96,7 +96,7 @@ struct IOSVoiceDesignBriefSheet: View {
                 // below are alternative one-tap confirms. Disabled until something is written —
                 // the header X still closes an empty sheet.
                 IOSPrimaryCTAButton(
-                    title: "Done",
+                    title: "完成",
                     tint: tint,
                     isEnabled: !voiceDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 ) {

@@ -169,9 +169,9 @@ struct IOSPlayerSheet: View {
 
     private var playerEyebrowLabel: String {
         switch item.modeLabel.lowercased() {
-        case "custom": return "Custom Voice"
-        case "design": return "Voice Design"
-        case "clone": return "Voice Cloning"
+        case "custom": return "自定义声音"
+        case "design": return "声音设计"
+        case "clone": return "声音克隆"
         default: return item.modeLabel
         }
     }
@@ -303,7 +303,7 @@ struct IOSPlayerSheet: View {
     private var controls: some View {
         HStack(spacing: 16) {
             playerSideButton(
-                title: "Save",
+                title: "保存",
                 symbol: "bookmark",
                 action: {
                     if let onSave {
@@ -319,7 +319,7 @@ struct IOSPlayerSheet: View {
                 controller.togglePlayback()
             } label: {
                 Image(systemName: controller.isPlaying ? "pause.fill" : "play.fill")
-                    .accessibilityLabel(controller.isPlaying ? "Pause" : "Play")
+                    .accessibilityLabel(controller.isPlaying ? "暂停" : "播放")
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(IOSAppTheme.accentForeground)
                     .frame(width: 72, height: 72)
@@ -345,7 +345,7 @@ struct IOSPlayerSheet: View {
             .disabled(controller.duration <= 0)
 
             playerSideButton(
-                title: "Download",
+                title: "下载",
                 symbol: "arrow.down.to.line",
                 action: { controller.shareCurrent() }
             )

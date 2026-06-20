@@ -48,7 +48,7 @@ struct SettingsView: View {
     @State private var outputDirectoryIssue: String?
 
     // Hidden "secret debug toggle": tap the version label 7× to flip the
-    // persisted DebugMode flag (telemetry/probing + isolated QwenVoice-Debug
+    // persisted DebugMode flag (telemetry/probing + isolated QwenVoice-Local-Debug
     // data). Applies on next launch. The QWENVOICE_DEBUG env var is the
     // equivalent dev/script path.
     @State private var showDebugToggledAlert = false
@@ -186,7 +186,7 @@ struct SettingsView: View {
                                 ) {
                                     Button("OK", role: .cancel) {}
                                 } message: {
-                                    Text("Relaunch Vocello to apply. While on, debug mode isolates data in the QwenVoice-Debug folder and (soon) enables telemetry and probing.")
+                                    Text("Relaunch EchoTwin to apply. While on, debug mode isolates data in the QwenVoice-Local-Debug folder and (soon) enables telemetry and probing.")
                                 }
                             Button("Reveal in Finder") {
                                 NSWorkspace.shared.open(QwenVoiceApp.appSupportDir)
@@ -600,13 +600,13 @@ private struct ActionButton: View {
             .accessibilityIdentifier("settings_download_\(model.id)")
 
         case .downloading:
-            HoverableActionButton(title: "Cancel") {
+            HoverableActionButton(title: "取消") {
                 viewModel.cancelDownload(model)
             }
             .accessibilityIdentifier("settings_cancel_\(model.id)")
 
         case .repairAvailable:
-            HoverableActionButton(title: "Repair", tint: .orange) {
+            HoverableActionButton(title: "修复", tint: .orange) {
                 Task { await viewModel.download(model) }
             }
             .accessibilityIdentifier("settings_repair_\(model.id)")

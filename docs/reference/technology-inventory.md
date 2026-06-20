@@ -144,7 +144,7 @@ Most-frequent imports across `Sources/**/*.swift`:
 
 | Component | Technology |
 |---|---|
-| **macOS app data** | `~/Library/Application Support/QwenVoice/` (release) or `QwenVoice-Debug/` (debug). |
+| **macOS app data** | `~/Library/Application Support/QwenVoice-Local/` (release) or `QwenVoice-Local-Debug/` (debug). |
 | **iOS app data** | App Group `group.com.patricedery.vocello.shared`. |
 | **History database** | SQLite via **GRDB** (`history.sqlite`). |
 | **Settings/preferences** | `UserDefaults`; per-mode model-quality choices. |

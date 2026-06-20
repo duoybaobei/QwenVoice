@@ -215,7 +215,7 @@ struct RecordReferenceClipSheet: View {
                 dismiss()
             }
         } message: {
-            Text("Vocello needs the microphone to record reference clips. Enable it in System Settings to continue.")
+            Text("EchoTwin needs the microphone to record reference clips. Enable it in System Settings to continue.")
         }
     }
 

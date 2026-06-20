@@ -34,7 +34,7 @@ struct EmotionPickerView: View {
 
     private var currentToneLabel: String {
         if isCustomMode {
-            return "Custom"
+            return "自定义"
         }
 
         guard let selectedPreset else {
@@ -149,10 +149,10 @@ struct EmotionPickerView: View {
                 }
 
                 HStack(alignment: .top, spacing: 12) {
-                    ConfigurationColumn(label: "Delivery") { tonePicker }
+                    ConfigurationColumn(label: "Delivery（语气）") { tonePicker }
 
                     if reservesIntensitySlot {
-                        ConfigurationColumn(label: "Intensity", isEnabled: showsIntensityPicker) {
+                        ConfigurationColumn(label: "Intensity（强度）", isEnabled: showsIntensityPicker) {
                             intensityPicker
                         }
                     }
@@ -167,10 +167,10 @@ struct EmotionPickerView: View {
             leadingColumns
         }
 
-        ConfigurationColumn(label: "Delivery") { tonePicker }
+        ConfigurationColumn(label: "Delivery（语气）") { tonePicker }
 
         if reservesIntensitySlot {
-            ConfigurationColumn(label: "Intensity", isEnabled: showsIntensityPicker) {
+            ConfigurationColumn(label: "Intensity（强度）", isEnabled: showsIntensityPicker) {
                 intensityPicker
             }
         }
@@ -178,7 +178,7 @@ struct EmotionPickerView: View {
 
     private var intensityInlineSlot: some View {
         HStack(alignment: .center, spacing: 10) {
-            Text("Intensity")
+            Text("Intensity（强度）")
                 .font(.footnote.weight(.semibold))
                 .foregroundStyle(showsIntensityPicker ? .secondary : .tertiary)
 
@@ -187,7 +187,7 @@ struct EmotionPickerView: View {
     }
 
     private var intensityPicker: some View {
-        Picker("Intensity", selection: $intensity) {
+        Picker("Intensity（强度）", selection: $intensity) {
             ForEach(EmotionIntensity.allCases) { level in
                 Text(level.label).tag(level)
             }

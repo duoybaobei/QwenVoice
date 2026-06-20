@@ -3,11 +3,12 @@ import Foundation
 enum AppPaths {
     static let appSupportOverrideEnvironmentKey = "QWENVOICE_APP_SUPPORT_DIR"
 
-    // Single package: production data lives in `QwenVoice/`. When the runtime
-    // debug toggle is on, dev work is isolated in `QwenVoice-Debug/` so it never
-    // touches real data. (Resolved once at launch via DebugMode.isEnabled.)
+    // Local self-use build: production data lives in `QwenVoice-Local/`.
+    // When the runtime debug toggle is on, dev work is isolated in
+    // `QwenVoice-Local-Debug/` so it never touches real data.
+    // (Resolved once at launch via DebugMode.isEnabled.)
     private static let defaultFolderName: String =
-        DebugMode.isEnabled ? "QwenVoice-Debug" : "QwenVoice"
+        DebugMode.isEnabled ? "QwenVoice-Local-Debug" : "QwenVoice-Local"
 
     static var appSupportDir: URL {
         if let overridePath = ProcessInfo.processInfo.environment[appSupportOverrideEnvironmentKey]?

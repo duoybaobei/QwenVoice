@@ -38,7 +38,7 @@ struct QVoiceiOSApp: App {
                             .scaledToFit()
                             .frame(width: 64, height: 64)
                             .foregroundColor(.orange)
-                        Text("App Initialization Failed")
+                        Text("应用初始化失败")
                             .font(.title2.bold())
                         Text(error.localizedDescription)
                             .multilineTextAlignment(.center)
@@ -99,6 +99,7 @@ struct QVoiceiOSApp: App {
                 }
             }
             .preferredColorScheme(.dark)
+            .environment(\.locale, Locale(identifier: "zh-Hans"))
         }
         .onChange(of: scenePhase) { _, newValue in
             handleScenePhaseChange(newValue)

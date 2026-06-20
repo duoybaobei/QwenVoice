@@ -362,7 +362,7 @@ struct IOSStudioCanvas<SetupChips: View>: View {
 
     private var generateCTA: some View {
         IOSPrimaryCTAButton(
-            title: "Generate",
+            title: "生成",
             symbol: "sparkles",
             tint: tint,
             isEnabled: canGenerate,

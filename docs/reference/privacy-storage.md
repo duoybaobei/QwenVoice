@@ -4,16 +4,16 @@ QwenVoice/Vocello is local-first. Prompts, recorded or imported reference clips,
 
 ## macOS Storage
 
-Installed/public macOS Release app support root:
+This local self-use fork stores macOS data under its own app support root:
 
 ```text
-~/Library/Application Support/QwenVoice/
+~/Library/Application Support/QwenVoice-Local/
 ```
 
 Debug builds use a separate persistent development root so models, saved voices, outputs, and `history.sqlite` survive rebuilds:
 
 ```text
-~/Library/Application Support/QwenVoice-Debug/
+~/Library/Application Support/QwenVoice-Local-Debug/
 ```
 
 The macOS app also honors:

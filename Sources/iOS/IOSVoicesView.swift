@@ -355,9 +355,9 @@ private enum VoiceFilter: String, Identifiable, CaseIterable, Hashable {
 
     var label: String {
         switch self {
-        case .all: return "All"
-        case .builtIn: return "Built-in"
-        case .saved: return "Saved"
+        case .all: return "全部"
+        case .builtIn: return "内置"
+        case .saved: return "已保存"
         }
     }
 }

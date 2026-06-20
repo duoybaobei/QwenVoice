@@ -8,11 +8,11 @@ public enum GenerationMode: String, CaseIterable, Codable, Hashable, Sendable {
     public var displayName: String {
         switch self {
         case .custom:
-            return "Custom Voice"
+            return "自定义声音"
         case .design:
-            return "Voice Design"
+            return "声音设计"
         case .clone:
-            return "Voice Cloning"
+            return "声音克隆"
         }
     }
 
@@ -43,17 +43,17 @@ public enum Qwen3SupportedLanguage: String, CaseIterable, Codable, Hashable, Sen
 
     public var displayName: String {
         switch self {
-        case .auto: return "Auto"
-        case .chinese: return "Chinese"
-        case .english: return "English"
-        case .japanese: return "Japanese"
-        case .korean: return "Korean"
-        case .german: return "German"
-        case .french: return "French"
-        case .russian: return "Russian"
-        case .portuguese: return "Portuguese"
-        case .spanish: return "Spanish"
-        case .italian: return "Italian"
+        case .auto: return "自动"
+        case .chinese: return "中文"
+        case .english: return "英语"
+        case .japanese: return "日语"
+        case .korean: return "韩语"
+        case .german: return "德语"
+        case .french: return "法语"
+        case .russian: return "俄语"
+        case .portuguese: return "葡萄牙语"
+        case .spanish: return "西班牙语"
+        case .italian: return "意大利语"
         }
     }
 
@@ -106,10 +106,10 @@ public enum Qwen3SupportedLanguage: String, CaseIterable, Codable, Hashable, Sen
 }
 
 public enum EngineActivityLabels {
-    public static let preparingVoiceReference = "Preparing voice reference…"
+    public static let preparingVoiceReference = "正在准备声音参考…"
 
     public static func generating(mode: GenerationMode) -> String {
-        "Generating \(mode.displayName)…"
+        "正在生成\(mode.displayName)…"
     }
 }
 
@@ -638,13 +638,13 @@ public enum PreparedVoiceQualityWarning {
     public static func headline(for token: String) -> String? {
         switch token {
         case "reference_duration_short":
-            return "Reference is shorter than recommended (under 10 seconds)."
+            return "参考音频短于建议时长（少于 10 秒）。"
         case "reference_duration_long":
-            return "Reference is longer than recommended (over 30 seconds)."
+            return "参考音频长于建议时长（超过 30 秒）。"
         case "reference_duration_excessive":
-            return "Reference exceeds the 60 second maximum supported for cloning."
+            return "参考音频超过声音克隆支持的 60 秒上限。"
         case "reference_quality_unreadable":
-            return "Reference audio could not be read."
+            return "无法读取参考音频。"
         default:
             return nil
         }
@@ -657,13 +657,13 @@ public enum PreparedVoiceQualityWarning {
     public static func shortLabel(for token: String) -> String? {
         switch token {
         case "reference_duration_short":
-            return "Reference too short"
+            return "参考过短"
         case "reference_duration_long":
-            return "Reference too long"
+            return "参考过长"
         case "reference_duration_excessive":
-            return "Reference exceeds 60 s"
+            return "参考超过 60 秒"
         case "reference_quality_unreadable":
-            return "Reference unreadable"
+            return "参考无法读取"
         default:
             return nil
         }
@@ -681,12 +681,12 @@ public enum PreparedVoiceQualityWarning {
     public static func summary(for tokens: [String]) -> String {
         let lines = tokens.compactMap { headline(for: $0) }
         if lines.isEmpty {
-            return "Voice cloning works best with 10–20 seconds of clean speech."
+            return "声音克隆最适合使用 10-20 秒的清晰语音。"
         }
         let trailer = isHardBlocking(tokens)
-            ? "Pick a clip that is 60 seconds or shorter to use it for cloning."
-            : "Clones from references outside this range still work, but may sound less consistent."
-        return "Voice cloning works best with 10–20 seconds of clean speech.\n\n" +
+            ? "请选择 60 秒以内的片段用于声音克隆。"
+            : "超出建议范围的参考仍可用于克隆，但声音一致性可能会降低。"
+        return "声音克隆最适合使用 10-20 秒的清晰语音。\n\n" +
             lines.map { "• \($0)" }.joined(separator: "\n") +
             "\n\n" + trailer
     }
@@ -1166,9 +1166,9 @@ public enum Qwen3SamplingVariation: String, Codable, Hashable, Sendable, CaseIte
 
     public var displayName: String {
         switch self {
-        case .expressive: return "Expressive"
-        case .balanced: return "Balanced"
-        case .consistent: return "Consistent"
+        case .expressive: return "表现力"
+        case .balanced: return "均衡"
+        case .consistent: return "稳定"
         }
     }
 }

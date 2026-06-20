@@ -17,18 +17,18 @@ private struct NavigationSectionHeader: View {
     }
 }
 
-/// Compact Vocello brand lockup pinned to the top of the sidebar via
+/// Compact EchoTwin brand lockup pinned to the top of the sidebar via
 /// `safeAreaInset(edge: .top)`. Stays out of the List's scroll region so
 /// the brand anchor remains visible as the user scrolls through sections.
 ///
 /// Three-tier typography:
-///   • V glyph (22pt image)            — the colored brand anchor.
+///   • EchoTwin mark (22pt image)      — the colored brand anchor.
 ///   • "AI·TTS" preamble (caption,
 ///      medium, secondary)             — quiet category qualifier; SF Pro
 ///                                        default for a slightly technical
 ///                                        feel that contrasts the wordmark's
 ///                                        rounded warmth.
-///   • "Vocello" wordmark (18pt SF
+///   • "EchoTwin" wordmark (18pt SF
 ///      Rounded semibold, primary)     — the spoken-aloud name.
 ///
 /// Intentionally NOT a stylized display face: PRODUCT.md asks the brand
@@ -45,7 +45,7 @@ private struct SidebarBrandHeader: View {
                     dimension[.bottom] - 2
                 }
 
-            Text("Vocello")
+            Text("EchoTwin")
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
                 .foregroundStyle(.primary)
 
@@ -61,7 +61,7 @@ private struct SidebarBrandHeader: View {
         .padding(.top, 14)
         .padding(.bottom, 14)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Vocello, AI text to speech")
+        .accessibilityLabel("EchoTwin, AI text to speech")
     }
 }
 
@@ -227,7 +227,7 @@ private struct SidebarRow: View {
                     .foregroundStyle(iconColor)
                     .frame(width: 22, alignment: .center)
 
-                Text(item.rawValue)
+                Text(item.displayTitle)
                     .font(.system(size: 14, weight: isSelected ? .semibold : .regular))
                     .foregroundStyle(textColor)
                     .lineLimit(1)
@@ -253,7 +253,7 @@ private struct SidebarRow: View {
             .appAnimation(.easeOut(duration: 0.14), value: isHovered)
             .appAnimation(.easeOut(duration: 0.14), value: isSelected)
             .disabled(isDisabled)
-            .accessibilityLabel(item.rawValue)
+            .accessibilityLabel(item.displayTitle)
             .accessibilityValue(accessibilityStateValue)
             .accessibilityIdentifier(item.accessibilityID)
     }
@@ -307,7 +307,7 @@ struct SidebarView: View {
                 }
             } header: {
                 NavigationSectionHeader(
-                    title: section.rawValue,
+                    title: section.displayTitle,
                     accessibilityID: section.accessibilityID
                 )
             }

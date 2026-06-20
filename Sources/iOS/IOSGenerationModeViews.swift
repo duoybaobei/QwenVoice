@@ -196,7 +196,7 @@ struct IOSCustomVoiceView: View {
         batchConfig = IOSBatchConfig(
             lines: lines,
             tint: IOSBrandTheme.custom,
-            modeLabel: "Custom Voice",
+            modeLabel: "自定义声音",
             outputSubfolder: outputSubfolder,
             caller: "IOSCustomVoiceView.batch",
             makeRequest: { line, index, total, seed, outputPath in
@@ -280,7 +280,7 @@ struct IOSCustomVoiceView: View {
             action: presentVoicePicker
         )
         IOSStudioSetupChip(
-            eyebrow: "Delivery",
+            eyebrow: "Delivery（语气）",
             value: deliveryChipLabel,
             abbreviation: IOSStudioChipAbbreviation.prefix2(draft.delivery.selectedPresetLabel),
             leadingSymbol: "theatermasks.fill",
@@ -924,7 +924,7 @@ struct IOSVoiceDesignView: View {
             action: presentBriefEditor
         )
         IOSStudioSetupChip(
-            eyebrow: "Delivery",
+            eyebrow: "Delivery（语气）",
             value: deliveryChipLabel,
             abbreviation: IOSStudioChipAbbreviation.prefix2(draft.delivery.selectedPresetLabel),
             leadingSymbol: "theatermasks.fill",
@@ -1030,7 +1030,7 @@ struct IOSVoiceDesignView: View {
         batchConfig = IOSBatchConfig(
             lines: lines,
             tint: IOSBrandTheme.design,
-            modeLabel: "Voice Design",
+            modeLabel: "声音设计",
             outputSubfolder: outputSubfolder,
             caller: "IOSVoiceDesignView.batch",
             makeRequest: { line, index, total, seed, outputPath in

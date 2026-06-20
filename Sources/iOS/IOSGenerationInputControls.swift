@@ -68,7 +68,7 @@ struct IOSDeliveryPicker: View {
             .accessibilityIdentifier(customAccessibilityIdentifier ?? "")
 
             if delivery.supportsIntensity {
-                Picker("Intensity", selection: $delivery.selectedIntensity) {
+                Picker("Intensity（强度）", selection: $delivery.selectedIntensity) {
                     ForEach(EmotionIntensity.allCases) { intensity in
                         Text(intensity.label).tag(intensity)
                     }

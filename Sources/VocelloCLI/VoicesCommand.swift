@@ -79,7 +79,7 @@ enum VoicesCommand {
 
         Options:
           --json       (list) emit JSON instead of a table
-          --data-dir   runtime dir (default ~/Library/Application Support/QwenVoice[-Debug])
+          --data-dir   runtime dir (default ~/Library/Application Support/QwenVoice-Local[-Debug])
           --manifest   override path to qwenvoice_contract.json
         """)
     }

@@ -29,7 +29,7 @@ discovered repo-relative, so the CLI works from the repo root or any subdirector
 to override.
 
 By default the CLI uses the app's runtime data directory
-(`~/Library/Application Support/QwenVoice`, or `QwenVoice-Debug` when `QWENVOICE_DEBUG` is truthy);
+(`~/Library/Application Support/QwenVoice-Local`, or `QwenVoice-Local-Debug` when `QWENVOICE_DEBUG` is truthy);
 `--data-dir <path>` overrides it. `bench` defaults to the debug-isolated folder (which holds the full
 model set) and forces telemetry on.
 

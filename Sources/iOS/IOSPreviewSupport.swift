@@ -151,7 +151,7 @@ enum IOSPreviewRuntime {
             IOSPreviewRouteDefinition(
                 route: "settings",
                 variant: "default",
-                title: "Settings",
+                title: "设置",
                 initialState: IOSPreviewInitialState(
                     selectedTab: .settings,
                     selectedGenerationSection: .custom,

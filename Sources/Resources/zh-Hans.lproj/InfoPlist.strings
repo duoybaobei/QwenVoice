@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "EchoTwin";
+"NSMicrophoneUsageDescription" = "EchoTwin 会录制你用于声音克隆的参考片段。音频只会保存在本机。";
+"NSSpeechRecognitionUsageDescription" = "EchoTwin 会在设备上转写参考片段，以提升克隆质量。内容不会离开本机。";

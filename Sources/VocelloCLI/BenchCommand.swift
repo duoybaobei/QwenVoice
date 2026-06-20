@@ -406,12 +406,12 @@ enum BenchCommand {
             .urls(for: .applicationSupportDirectory, in: .userDomainMask).first
             ?? URL(fileURLWithPath: (NSHomeDirectory() as NSString)
                 .appendingPathComponent("Library/Application Support"), isDirectory: true)
-        return base.appendingPathComponent("QwenVoice", isDirectory: true)
+        return base.appendingPathComponent("QwenVoice-Local", isDirectory: true)
     }
 
     /// Clear this run's diagnostics, but refuse to wipe the shipped app's real
     /// data dir unless --force (bench forces QWENVOICE_DEBUG=1 so the default
-    /// resolves to QwenVoice-Debug; this guards an explicit --data-dir <real>).
+    /// resolves to QwenVoice-Local-Debug; this guards an explicit --data-dir <real>).
     private static func clearDiagnosticsIfSafe(dataDir: URL, force: Bool) throws {
         if !force, dataDir.standardizedFileURL.path == realAppDataDir().standardizedFileURL.path {
             throw CLIError("refusing to clear diagnostics in the real app data dir (\(dataDir.path)); pass --keep to append or --force to override")

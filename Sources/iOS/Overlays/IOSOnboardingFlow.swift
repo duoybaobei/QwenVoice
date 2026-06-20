@@ -139,7 +139,7 @@ private struct IOSOnboardingWelcomePage: View {
             IOSOnboardingIcon(symbol: "sparkles", colors: [IOSBrandTheme.accent, IOSBrandTheme.clone])
                 .padding(.bottom, 32)
 
-            Text("Vocello")
+            Text("EchoTwin")
                 .font(.system(size: 36, weight: .bold))
                 .tracking(-0.90)
                 .foregroundStyle(IOSAppTheme.textPrimary)
