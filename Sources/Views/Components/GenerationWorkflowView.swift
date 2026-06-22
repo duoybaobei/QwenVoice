@@ -982,15 +982,10 @@ struct QwenLanguagePicker: View {
                 }
             }
         } label: {
-            // A single concatenated Text so the bordered button style cannot
+            // A single Text so the bordered button style cannot
             // decompose the label and move the chevron to the leading edge
-            // (it reorders HStack{Text, Image} labels); per-segment color
-            // keeps the chevron quiet like the native picker's.
-            (Text(effectiveLabel)
-                + Text("  ")
-                + Text(Image(systemName: "chevron.up.chevron.down"))
-                    .font(.caption2.weight(.semibold))
-                    .foregroundColor(.secondary))
+            // (it reorders HStack{Text, Image} labels).
+            Text("\(effectiveLabel)  \(Image(systemName: "chevron.up.chevron.down"))")
                 .lineLimit(1)
                 .padding(.horizontal, 3)
                 .padding(.vertical, 1)

@@ -158,7 +158,7 @@ struct QwenVoiceApp: App {
 
         Task {
             do {
-                try await ttsEngineStore.initialize(appSupportDirectory: Self.appSupportDir)
+                try await ttsEngineStore.initialize(appSupportDirectory: AppPaths.appSupportDir)
             } catch {
                 // Native engine initialization publishes its own failure snapshot.
             }

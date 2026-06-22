@@ -339,8 +339,9 @@ Implemented in `Sources/QwenVoiceCore/NativeCloneSupport.swift`.
    The recommended reference window is **10–20 seconds of clean speech**.
 
 5. **Clone prompt creation**
-   - If a transcript exists and the model supports optimized cloning, call `createVoiceClonePrompt(refAudio:refText:xVectorOnlyMode: false)`.
-   - The resulting `Qwen3TTSVoiceClonePrompt` is cached in memory and persisted to disk (under `voicesDirectory`) keyed by model ID, reference fingerprint, and transcript hash.
+   - If a transcript exists and the model supports optimized cloning, call `createVoiceClonePrompt(refAudio:refText:xVectorOnlyMode: false)` for ICL-backed cloning.
+   - If no transcript exists, call `createVoiceClonePrompt(refAudio:refText:nil,xVectorOnlyMode: true)` for the speaker-only audio fallback. This is lower guidance than transcript-backed cloning, but it must remain usable.
+   - The resulting `Qwen3TTSVoiceClonePrompt` is cached in memory and persisted to disk (under `voicesDirectory`) keyed by model ID, reference fingerprint, transcript hash/mode, and language.
    - Re-use the same prompt across multiple generations to avoid recomputing speaker features.
 
 ---

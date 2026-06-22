@@ -39,7 +39,7 @@ private struct HistoryListItem: Identifiable, Sendable {
     // handleGenerationAppended on the MainActor — DateFormatter itself is not
     // thread-safe, and a generation completing mid-reload would otherwise
     // race the shared instance (2026-06-12 release-QA concurrency audit).
-    nonisolated(unsafe) private static let dateFormatter: DateFormatter = {
+    private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short

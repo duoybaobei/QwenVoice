@@ -189,7 +189,7 @@ struct SettingsView: View {
                                     Text("Relaunch EchoTwin to apply. While on, debug mode isolates data in the QwenVoice-Local-Debug folder and (soon) enables telemetry and probing.")
                                 }
                             Button("Reveal in Finder") {
-                                NSWorkspace.shared.open(QwenVoiceApp.appSupportDir)
+                                NSWorkspace.shared.open(AppPaths.appSupportDir)
                             }
                             .controlSize(.small)
                             .accessibilityIdentifier("preferences_openFinderButton")

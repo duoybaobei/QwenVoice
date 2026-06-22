@@ -13,7 +13,7 @@ struct Generation: Identifiable, Codable, Hashable, Sendable {
     var audioPath: String
     var duration: Double?
     var createdAt: Date
-    nonisolated(unsafe) private static let dateFormatter: DateFormatter = {
+    private static let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
         f.timeStyle = .short

@@ -167,7 +167,7 @@ final class VoiceDesignCoordinator {
                 )
                 GenerationTelemetryMerger.scheduleMerge(generationID: generationRequest.generationID)
 
-                var generation = Generation(
+                let generation = Generation(
                     text: text,
                     mode: model.mode.rawValue,
                     modelTier: model.tier,

@@ -759,7 +759,8 @@ public final class MLXTTSEngine: TTSEngineRuntimeControlling, NativeMemoryReport
                 identityKey: uiIdentityKey,
                 message: error.localizedDescription
             )
-            handle(error)
+            loadState = .loaded(modelID: modelID)
+            visibleErrorMessage = nil
             throw error
         }
     }

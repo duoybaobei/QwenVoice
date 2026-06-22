@@ -12,16 +12,15 @@ import GRDB
 /// previously the synchronous save on `@MainActor` introduced a 5-30ms
 /// hitch right after every generation completed.
 final class DatabaseService: @unchecked Sendable {
-    /// Process-wide singleton. Marked `nonisolated(unsafe)` because the
-    /// class itself manages thread-safety via `DatabaseQueue`; the
-    /// initializer is the only place state is mutated.
-    nonisolated(unsafe) static let shared = DatabaseService()
+    /// Process-wide singleton. The class itself manages thread-safety via
+    /// `DatabaseQueue`; the initializer is the only place state is mutated.
+    static let shared = DatabaseService()
 
     private let dbQueue: DatabaseQueue?
     let initError: String?
 
     private init() {
-        let dbPath = QwenVoiceApp.appSupportDir.appendingPathComponent("history.sqlite").path
+        let dbPath = AppPaths.appSupportDir.appendingPathComponent("history.sqlite").path
         do {
             let queue = try DatabaseQueue(path: dbPath)
             try Self.makeMigrator().migrate(queue)

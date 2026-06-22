@@ -201,7 +201,7 @@ final class VoiceCloningCoordinator {
 
                 let voiceName = selectedVoice?.name
                     ?? URL(fileURLWithPath: refPath).deletingPathExtension().lastPathComponent
-                var generation = Generation(
+                let generation = Generation(
                     text: currentDraft.text,
                     mode: model.mode.rawValue,
                     modelTier: model.tier,

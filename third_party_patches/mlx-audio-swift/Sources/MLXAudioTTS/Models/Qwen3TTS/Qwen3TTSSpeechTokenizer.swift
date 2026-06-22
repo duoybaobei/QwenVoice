@@ -1092,7 +1092,7 @@ final class Qwen3TTSSpeechTokenizerDecoder: Module {
             initConvMS: 0, // folded into decoderBlocksMS for now
             decoderBlocksMS: decoderBlocksMS,
             outputSnakeMS: 0, // folded into outputMS for now
-            outputConvMS: 0, // folded into outputMS for now
+            outputConvMS: outputMS,
             totalMS: totalMS
         )
         return (clipped, timings)

@@ -90,12 +90,9 @@ struct VoiceBriefEditor: View {
                 .accessibilityIdentifier("voiceDesign_briefStarter_\(index)")
             }
         } label: {
-            // Single concatenated Text so the bordered button style cannot
+            // Single Text so the bordered button style cannot
             // reorder a decomposable label (same pattern as QwenLanguagePicker).
-            (Text("Starting points  ")
-                + Text(Image(systemName: "chevron.up.chevron.down"))
-                    .font(.caption2.weight(.semibold))
-                    .foregroundColor(.secondary))
+            Text("Starting points  \(Image(systemName: "chevron.up.chevron.down"))")
                 .font(.caption)
                 .lineLimit(1)
         }

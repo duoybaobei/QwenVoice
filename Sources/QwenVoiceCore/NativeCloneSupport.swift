@@ -273,17 +273,18 @@ actor NativePreparedCloneConditioningCache {
         qwenRuntimeProfileSignature: String? = nil
     ) throws -> ResolvedCloneConditioning {
         guard model.supportsOptimizedVoiceClone,
-              conditioning.voiceClonePrompt == nil,
-              let transcript = conditioning.resolvedTranscript else {
+              conditioning.voiceClonePrompt == nil else {
             return conditioning
         }
 
+        let transcript = conditioning.resolvedTranscript
+        let xVectorOnlyMode = transcript == nil
         let cacheKey = conditioning.internalIdentityKey
         let artifactMetadata = clonePromptArtifactMetadata(
             modelID: modelID,
             conditioning: conditioning,
             language: language,
-            xVectorOnlyMode: false,
+            xVectorOnlyMode: xVectorOnlyMode,
             qwenRuntimeProfileSignature: qwenRuntimeProfileSignature
         )
         let artifactDirectory = clonePromptArtifactDirectory(
@@ -333,7 +334,7 @@ actor NativePreparedCloneConditioningCache {
         guard let prompt = try model.createVoiceClonePrompt(
             refAudio: conditioning.referenceAudio,
             refText: transcript,
-            xVectorOnlyMode: false
+            xVectorOnlyMode: xVectorOnlyMode
         ) else {
             return conditioning
         }

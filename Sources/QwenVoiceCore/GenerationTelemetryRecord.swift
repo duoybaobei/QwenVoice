@@ -28,7 +28,7 @@ public struct GenerationTelemetryRecord: Hashable, Codable, Sendable {
     /// optional, so older rows still decode.
     public static let currentSchemaVersion = 5
 
-    public let clockSource: String? = "mach_absolute_time"
+    public let clockSource: String?
 
     public let schemaVersion: Int
     public let generationID: String
@@ -90,10 +90,12 @@ public struct GenerationTelemetryRecord: Hashable, Codable, Sendable {
         mlxMemoryByStage: [String: NativeMLXMemorySnapshot]? = nil,
         chunkTimeline: [GenerationChunkTelemetry]? = nil,
         audioQC: AudioQCReport? = nil,
+        clockSource: String? = "mach_absolute_time",
         schemaVersion: Int = GenerationTelemetryRecord.currentSchemaVersion,
         processName: String = ProcessInfo.processInfo.processName,
         processIdentifier: Int32 = ProcessInfo.processInfo.processIdentifier
     ) {
+        self.clockSource = clockSource
         self.schemaVersion = schemaVersion
         self.generationID = generationID
         self.layer = layer
