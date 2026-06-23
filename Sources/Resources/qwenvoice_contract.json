@@ -598,5 +598,27 @@
         "artifactAvailability": "public_artifact"
       }
     }
+  ],
+  "storyModels": [
+    {
+      "id": "story_qwen3_1_7b",
+      "name": "Story Writer",
+      "shortDescription": "On-device text model that writes original kids' stories (Qwen3 1.7B, 4-bit).",
+      "huggingFaceRepo": "mlx-community/Qwen3-1.7B-4bit",
+      "huggingFaceRevision": "3b1b1768f8f8cf8351c712464f906e86c2b8269e",
+      "folder": "Qwen3-1.7B-4bit",
+      "estimatedDownloadBytes": 984015687,
+      "requiredRelativePaths": [
+        "config.json",
+        "model.safetensors",
+        "model.safetensors.index.json",
+        "tokenizer.json",
+        "tokenizer_config.json",
+        "special_tokens_map.json",
+        "added_tokens.json",
+        "vocab.json",
+        "merges.txt"
+      ]
+    }
   ]
 }

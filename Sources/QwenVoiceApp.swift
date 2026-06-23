@@ -10,6 +10,7 @@ struct QwenVoiceApp: App {
     @State private var didInitializeSelectedTTSEngine = false
     @StateObject private var audioPlayer = AudioPlayerViewModel()
     @State private var modelManager = ModelManagerViewModel()
+    @State private var storyModelManager = StoryModelManagerViewModel()
     @State private var savedVoicesViewModel = SavedVoicesViewModel()
     @StateObject private var appCommandRouter = AppCommandRouter.shared
     @StateObject private var generationLibraryEvents = GenerationLibraryEvents.shared
@@ -41,6 +42,7 @@ struct QwenVoiceApp: App {
             // window).
             SettingsView(highlightedMode: .constant(nil))
                 .environment(modelManager)
+                .environment(storyModelManager)
                 .environment(\.locale, Locale(identifier: "zh-Hans"))
         }
         .commands {
@@ -127,6 +129,7 @@ struct QwenVoiceApp: App {
                     .environmentObject(audioPlayer)
                     .environmentObject(audioPlayer.playbackProgress)
                     .environment(modelManager)
+                    .environment(storyModelManager)
                     .environment(savedVoicesViewModel)
                     .environmentObject(appCommandRouter)
                     .environmentObject(generationLibraryEvents)

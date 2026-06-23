@@ -12,6 +12,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
     case customVoice = "Custom Voice"
     case voiceDesign = "Voice Design"
     case voiceCloning = "Voice Cloning"
+    case storyKingdom = "Story Kingdom"
     case history = "History"
     case voices = "Saved Voices"
     /// Renamed from `.models` (May 2026 redesign): the Models tab
@@ -31,6 +32,8 @@ enum SidebarItem: String, CaseIterable, Identifiable {
             return "声音设计"
         case .voiceCloning:
             return "声音克隆"
+        case .storyKingdom:
+            return "故事王国"
         case .history:
             return "历史记录"
         case .voices:
@@ -50,6 +53,8 @@ enum SidebarItem: String, CaseIterable, Identifiable {
             return "screen_voiceDesign"
         case .voiceCloning:
             return "screen_voiceCloning"
+        case .storyKingdom:
+            return "screen_storyKingdom"
         case .history:
             return "screen_history"
         case .voices:
@@ -67,6 +72,10 @@ enum SidebarItem: String, CaseIterable, Identifiable {
             return .design
         case .voiceCloning:
             return .clone
+        case .storyKingdom:
+            // Story Kingdom renders through the Custom Voice path (built-in
+            // speakers), so it gates on the same model as Custom Voice.
+            return .custom
         case .history, .voices, .settings:
             return nil
         }
@@ -83,6 +92,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         case .customVoice: return AppTheme.modeGlyph(for: .custom)
         case .voiceDesign: return AppTheme.modeGlyph(for: .design)
         case .voiceCloning: return AppTheme.modeGlyph(for: .clone)
+        case .storyKingdom: return "books.vertical"
         case .history: return "clock.arrow.circlepath"
         case .voices: return "person.2.wave.2"
         case .settings: return "gearshape"
@@ -112,7 +122,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         var items: [SidebarItem] {
             switch self {
             case .generate:
-                return [.customVoice, .voiceDesign, .voiceCloning]
+                return [.customVoice, .voiceDesign, .voiceCloning, .storyKingdom]
             case .library:
                 return [.history, .voices]
             case .settings:
@@ -122,7 +132,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
     }
 
     static var generationItems: [SidebarItem] {
-        [.customVoice, .voiceDesign, .voiceCloning]
+        [.customVoice, .voiceDesign, .voiceCloning, .storyKingdom]
     }
 
     @MainActor
@@ -174,6 +184,8 @@ struct ContentView: View {
     @State private var customVoiceDraft = CustomVoiceDraft()
     @State private var voiceDesignDraft = VoiceDesignDraft()
     @State private var voiceCloningDraft = VoiceCloningDraft()
+    @State private var storyKingdomDraft = CustomVoiceDraft()
+    @State private var storyKingdomCloneDraft = VoiceCloningDraft()
     @State private var pendingVoiceCloningHandoff: PendingVoiceCloningHandoff?
     @State private var didCompleteInitialAvailabilityRefresh = false
     @StateObject private var generationWarmupCoordinator = MacGenerationWarmupCoordinator()
@@ -304,6 +316,11 @@ struct ContentView: View {
         .onChange(of: customVoiceDraft) { _, _ in handleGenerationDraftChange() }
         .onChange(of: voiceDesignDraft) { _, _ in handleGenerationDraftChange() }
         .onChange(of: voiceCloningDraft) { _, _ in handleGenerationDraftChange() }
+        // Story Kingdom's clone draft + voice-source pick drive their own
+        // warmup context (see `warmupContext`), so react to them the same way
+        // as the other generation drafts.
+        .onChange(of: storyKingdomCloneDraft) { _, _ in handleGenerationDraftChange() }
+        .onChange(of: storyKingdomVoiceSource) { _, _ in handleGenerationDraftChange() }
         .onChange(of: voiceCloningDraft.selectedSavedVoiceID) { _, newValue in
             handleVoiceCloningSavedVoiceIDChange(newValue)
         }
@@ -350,6 +367,8 @@ struct ContentView: View {
                 draft: $voiceCloningDraft,
                 pendingSavedVoiceHandoff: $pendingVoiceCloningHandoff
             )
+        case .storyKingdom:
+            StoryKingdomScreenHost(draft: $storyKingdomDraft, cloneDraft: $storyKingdomCloneDraft)
         case .history:
             HistoryView(
                 searchText: $historySearchText,
@@ -518,13 +537,43 @@ struct ContentView: View {
         )
     }
 
+    /// Whether Story Kingdom is currently set to use the user's cloned voice
+    /// (`.clone` mode) instead of a built-in speaker (`.custom` mode). Read
+    /// from the same `@AppStorage` key the `StoryKingdomView` picker writes,
+    /// so the warmup coordinator stays aligned with the screen's actual mode
+    /// instead of always warming the Custom Voice model and fighting the
+    /// screen's own clone-priming task.
+    @AppStorage("storyKingdom.voiceSource") private var storyKingdomVoiceSource: StoryVoiceSource = .builtIn
+
     private func warmupContext(
         for item: SidebarItem?,
         allowClonePrime: Bool
     ) -> MacGenerationWarmupCoordinator.WarmupContext? {
-        guard let item,
-              let mode = item.generationMode,
-              let model = modelManager.generationActiveVariant(for: mode) else {
+        guard let item else { return nil }
+
+        // Story Kingdom's effective generation mode follows the in-screen
+        // voice-source pick: built-in speaker → `.custom`, cloned voice →
+        // `.clone`. The static `SidebarItem.generationMode` only knows
+        // `.custom`, so resolve the real mode here — otherwise the warmup
+        // coordinator warms the Custom Voice model while the screen's clone
+        // priming loads the Clone model, and each snapshot change makes them
+        // evict each other in a loop (启动引擎 → 准备 → 就绪 → 启动引擎…).
+        let mode: GenerationMode
+        let cloneDraft: VoiceCloningDraft?
+        switch item {
+        case .storyKingdom where storyKingdomVoiceSource == .custom:
+            mode = .clone
+            cloneDraft = storyKingdomCloneDraft
+        case .storyKingdom:
+            mode = .custom
+            cloneDraft = nil
+        default:
+            guard let resolvedMode = item.generationMode else { return nil }
+            mode = resolvedMode
+            cloneDraft = nil
+        }
+
+        guard let model = modelManager.generationActiveVariant(for: mode) else {
             return nil
         }
 
@@ -547,14 +596,18 @@ struct ContentView: View {
             )
             reference = nil
         case .clone:
+            // Use the draft that belongs to the screen that drove this warmup:
+            // Voice Cloning's own draft for `.voiceCloning`, Story Kingdom's
+            // clone draft when that screen is in custom-voice mode.
+            let activeCloneDraft = cloneDraft ?? voiceCloningDraft
             if allowClonePrime,
-               let referenceAudioPath = voiceCloningDraft.referenceAudioPath?
+               let referenceAudioPath = activeCloneDraft.referenceAudioPath?
                 .trimmingCharacters(in: .whitespacesAndNewlines),
                !referenceAudioPath.isEmpty {
                 let cloneReference = CloneReference(
                     audioPath: referenceAudioPath,
-                    transcript: voiceCloningDraft.trimmedReferenceTranscript,
-                    preparedVoiceID: voiceCloningDraft.selectedSavedVoiceID
+                    transcript: activeCloneDraft.trimmedReferenceTranscript,
+                    preparedVoiceID: activeCloneDraft.selectedSavedVoiceID
                 )
                 reference = cloneReference
                 identity = .clone(
@@ -562,7 +615,7 @@ struct ContentView: View {
                         modelID: model.id,
                         reference: cloneReference
                     ),
-                    preparedVoiceID: voiceCloningDraft.selectedSavedVoiceID
+                    preparedVoiceID: activeCloneDraft.selectedSavedVoiceID
                 )
             } else {
                 reference = nil
@@ -595,6 +648,29 @@ private struct CustomVoiceScreenHost: View {
             ttsEngineStore: ttsEngineStore,
             audioPlayer: audioPlayer,
             modelManager: modelManager
+        )
+    }
+}
+
+private struct StoryKingdomScreenHost: View {
+    @Binding var draft: CustomVoiceDraft
+    @Binding var cloneDraft: VoiceCloningDraft
+
+    @EnvironmentObject private var ttsEngineStore: TTSEngineStore
+    @EnvironmentObject private var audioPlayer: AudioPlayerViewModel
+    @Environment(ModelManagerViewModel.self) private var modelManager
+    @Environment(SavedVoicesViewModel.self) private var savedVoicesViewModel
+    @Environment(StoryModelManagerViewModel.self) private var storyModelManager
+
+    var body: some View {
+        StoryKingdomView(
+            draft: $draft,
+            cloneDraft: $cloneDraft,
+            ttsEngineStore: ttsEngineStore,
+            audioPlayer: audioPlayer,
+            modelManager: modelManager,
+            savedVoicesViewModel: savedVoicesViewModel,
+            storyModelManager: storyModelManager
         )
     }
 }

@@ -19,6 +19,10 @@ let package = Package(
 
         // Text-to-Speech (Qwen3-TTS)
         .library(name: "MLXAudioTTS", targets: ["MLXAudioTTS"]),
+
+        // Vocello addition: re-exported on-device text-LLM surface (story-text
+        // generation). Single-sources the mlx-swift-lm pin in this package.
+        .library(name: "MLXAudioLLM", targets: ["MLXAudioLLM"]),
     ],
     dependencies: [
         .package(url: "https://github.com/ml-explore/mlx-swift.git", exact: "0.30.6"),
@@ -67,6 +71,18 @@ let package = Package(
                 .product(name: "HuggingFace", package: "swift-huggingface"),
             ],
             path: "Sources/MLXAudioTTS"
+        ),
+
+        // MARK: - MLXAudioLLM (Vocello addition)
+        // Thin @_exported re-export of the upstream text-LLM modules so the app
+        // can drive on-device story-text generation. No local logic lives here.
+        .target(
+            name: "MLXAudioLLM",
+            dependencies: [
+                .product(name: "MLXLLM", package: "mlx-swift-lm"),
+                .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
+            ],
+            path: "Sources/MLXAudioLLM"
         ),
     ]
 )

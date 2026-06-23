@@ -106,6 +106,7 @@ enum AppTheme {
         case .customVoice: return customVoice
         case .voiceDesign: return voiceDesign
         case .voiceCloning: return voiceCloning
+        case .storyKingdom: return customVoice
         case .history: return history
         case .voices: return voices
         case .settings: return preferences
