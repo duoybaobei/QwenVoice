@@ -11,6 +11,7 @@ struct QwenVoiceApp: App {
     @StateObject private var audioPlayer = AudioPlayerViewModel()
     @State private var modelManager = ModelManagerViewModel()
     @State private var storyModelManager = StoryModelManagerViewModel()
+    @State private var asrModelManager = ASRModelManagerViewModel()
     @State private var savedVoicesViewModel = SavedVoicesViewModel()
     @StateObject private var appCommandRouter = AppCommandRouter.shared
     @StateObject private var generationLibraryEvents = GenerationLibraryEvents.shared
@@ -43,6 +44,7 @@ struct QwenVoiceApp: App {
             SettingsView(highlightedMode: .constant(nil))
                 .environment(modelManager)
                 .environment(storyModelManager)
+                .environment(asrModelManager)
                 .environment(\.locale, Locale(identifier: "zh-Hans"))
         }
         .commands {
@@ -130,6 +132,7 @@ struct QwenVoiceApp: App {
                     .environmentObject(audioPlayer.playbackProgress)
                     .environment(modelManager)
                     .environment(storyModelManager)
+                    .environment(asrModelManager)
                     .environment(savedVoicesViewModel)
                     .environmentObject(appCommandRouter)
                     .environmentObject(generationLibraryEvents)

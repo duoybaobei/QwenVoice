@@ -620,5 +620,27 @@
         "merges.txt"
       ]
     }
+  ],
+  "asrModels": [
+    {
+      "id": "asr_qwen3_0_6b",
+      "name": "Qwen3 ASR",
+      "shortDescription": "On-device speech recognition for read-along training (Qwen3-ASR 0.6B, 4-bit).",
+      "huggingFaceRepo": "mlx-community/Qwen3-ASR-0.6B-4bit",
+      "huggingFaceRevision": "313d850181767edf09f00a9c289becca70e58cd0",
+      "folder": "Qwen3-ASR-0.6B-4bit",
+      "estimatedDownloadBytes": 746586112,
+      "requiredRelativePaths": [
+        "config.json",
+        "model.safetensors",
+        "model.safetensors.index.json",
+        "tokenizer_config.json",
+        "vocab.json",
+        "merges.txt",
+        "preprocessor_config.json",
+        "chat_template.json",
+        "generation_config.json"
+      ]
+    }
   ]
 }

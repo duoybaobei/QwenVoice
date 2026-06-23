@@ -13,6 +13,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
     case voiceDesign = "Voice Design"
     case voiceCloning = "Voice Cloning"
     case storyKingdom = "Story Kingdom"
+    case readAlong = "Read Along"
     case history = "History"
     case voices = "Saved Voices"
     /// Renamed from `.models` (May 2026 redesign): the Models tab
@@ -34,6 +35,8 @@ enum SidebarItem: String, CaseIterable, Identifiable {
             return "声音克隆"
         case .storyKingdom:
             return "故事王国"
+        case .readAlong:
+            return "跟读训练"
         case .history:
             return "历史记录"
         case .voices:
@@ -55,6 +58,8 @@ enum SidebarItem: String, CaseIterable, Identifiable {
             return "screen_voiceCloning"
         case .storyKingdom:
             return "screen_storyKingdom"
+        case .readAlong:
+            return "screen_readAlong"
         case .history:
             return "screen_history"
         case .voices:
@@ -76,6 +81,13 @@ enum SidebarItem: String, CaseIterable, Identifiable {
             // Story Kingdom renders through the Custom Voice path (built-in
             // speakers), so it gates on the same model as Custom Voice.
             return .custom
+        case .readAlong:
+            // Read-Along speaks target words + feedback through the Custom
+            // Voice path (built-in speakers or a cloned reference), so it
+            // gates on the same model as Custom Voice. ASR availability is
+            // checked in-screen, not here — the loop degrades to "speak only"
+            // if the ASR model isn't downloaded yet.
+            return .custom
         case .history, .voices, .settings:
             return nil
         }
@@ -93,6 +105,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         case .voiceDesign: return AppTheme.modeGlyph(for: .design)
         case .voiceCloning: return AppTheme.modeGlyph(for: .clone)
         case .storyKingdom: return "books.vertical"
+        case .readAlong: return "text.bubble"
         case .history: return "clock.arrow.circlepath"
         case .voices: return "person.2.wave.2"
         case .settings: return "gearshape"
@@ -122,7 +135,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         var items: [SidebarItem] {
             switch self {
             case .generate:
-                return [.customVoice, .voiceDesign, .voiceCloning, .storyKingdom]
+                return [.customVoice, .voiceDesign, .voiceCloning, .storyKingdom, .readAlong]
             case .library:
                 return [.history, .voices]
             case .settings:
@@ -132,7 +145,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
     }
 
     static var generationItems: [SidebarItem] {
-        [.customVoice, .voiceDesign, .voiceCloning, .storyKingdom]
+        [.customVoice, .voiceDesign, .voiceCloning, .storyKingdom, .readAlong]
     }
 
     @MainActor
@@ -369,6 +382,8 @@ struct ContentView: View {
             )
         case .storyKingdom:
             StoryKingdomScreenHost(draft: $storyKingdomDraft, cloneDraft: $storyKingdomCloneDraft)
+        case .readAlong:
+            ReadAlongScreenHost()
         case .history:
             HistoryView(
                 searchText: $historySearchText,
@@ -671,6 +686,22 @@ private struct StoryKingdomScreenHost: View {
             modelManager: modelManager,
             savedVoicesViewModel: savedVoicesViewModel,
             storyModelManager: storyModelManager
+        )
+    }
+}
+
+private struct ReadAlongScreenHost: View {
+    @EnvironmentObject private var ttsEngineStore: TTSEngineStore
+    @EnvironmentObject private var audioPlayer: AudioPlayerViewModel
+    @Environment(ModelManagerViewModel.self) private var modelManager
+    @Environment(SavedVoicesViewModel.self) private var savedVoicesViewModel
+
+    var body: some View {
+        ReadAlongView(
+            ttsEngineStore: ttsEngineStore,
+            audioPlayer: audioPlayer,
+            modelManager: modelManager,
+            savedVoicesViewModel: savedVoicesViewModel
         )
     }
 }

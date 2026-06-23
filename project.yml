@@ -145,6 +145,8 @@ targets:
         product: MLXAudioTTS
       - package: MLXAudio
         product: MLXAudioLLM
+      - package: MLXAudio
+        product: MLXAudioSTT
       - package: MLXSwift
         product: MLX
       - package: SwiftHuggingFace

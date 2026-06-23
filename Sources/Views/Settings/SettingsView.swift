@@ -23,6 +23,10 @@ struct SettingsView: View {
     /// independently of the TTS models so it can be downloaded and
     /// unloaded without ever sharing memory with the TTS engine.
     @Environment(StoryModelManagerViewModel.self) private var storyModelViewModel
+    /// Standalone Qwen3-ASR speech-recognition model for the Read-Along
+    /// training loop. Downloaded/unloaded independently so it is only
+    /// co-resident with the TTS engine during the read-along recognize step.
+    @Environment(ASRModelManagerViewModel.self) private var asrModelViewModel
     /// Mode-keyed deep-link target. When the sidebar redirects
     /// the user to Settings (because a generation tab's required
     /// variant is missing), the upstream `ContentView` sets this
@@ -48,6 +52,7 @@ struct SettingsView: View {
     @State private var modelToDelete: TTSModel?
     @State private var showDeleteConfirmation = false
     @State private var showStoryDeleteConfirmation = false
+    @State private var showASRDeleteConfirmation = false
     /// Non-nil when the configured output folder is missing/unwritable
     /// (AudioService falls back to the default outputs folder).
     @State private var outputDirectoryIssue: String?
@@ -97,6 +102,22 @@ struct SettingsView: View {
                         Text("故事模型")
                     } footer: {
                         Text("用于「故事王国」的本地文字模型，单独下载、用完即卸载，不与语音模型同时占用内存。")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+
+                if asrModelViewModel.model != nil {
+                    Section {
+                        ASRModelDownloadRow(
+                            viewModel: asrModelViewModel,
+                            onDelete: { showASRDeleteConfirmation = true }
+                        )
+                    } header: {
+                        Text("语音识别模型")
+                    } footer: {
+                        Text("用于「跟读训练」的本地语音识别模型，单独下载、用完即卸载，不与语音模型同时占用内存。")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -271,6 +292,14 @@ struct SettingsView: View {
         } message: {
             Text(storyDeleteMessage)
         }
+        .alert("删除语音识别模型？", isPresented: $showASRDeleteConfirmation) {
+            Button("取消", role: .cancel) {}
+            Button("删除", role: .destructive) {
+                asrModelViewModel.delete()
+            }
+        } message: {
+            Text(asrDeleteMessage)
+        }
     }
 
     private func request(delete model: TTSModel) {
@@ -295,6 +324,18 @@ struct SettingsView: View {
         let name = storyModelViewModel.model?.name ?? "故事模型"
         let sizeText: String = {
             if case .downloaded(let sizeBytes) = storyModelViewModel.status, sizeBytes > 0 {
+                let size = ByteCountFormatter.string(fromByteCount: Int64(sizeBytes), countStyle: .file)
+                return "（\(size)）"
+            }
+            return ""
+        }()
+        return "将从磁盘删除「\(name)」\(sizeText)。之后可以重新下载。"
+    }
+
+    private var asrDeleteMessage: String {
+        let name = asrModelViewModel.model?.name ?? "语音识别模型"
+        let sizeText: String = {
+            if case .downloaded(let sizeBytes) = asrModelViewModel.status, sizeBytes > 0 {
                 let size = ByteCountFormatter.string(fromByteCount: Int64(sizeBytes), countStyle: .file)
                 return "（\(size)）"
             }
@@ -780,6 +821,189 @@ private struct StoryModelDownloadRow: View {
                 .progressViewStyle(.linear)
                 .tint(AppTheme.statusProgressTint)
                 .accessibilityIdentifier("settings_storyDownloadProgress")
+        }
+    }
+}
+
+// MARK: - ASR model row
+
+/// Single-package status/action row for the standalone Read-Along ASR model.
+/// Mirrors `StoryModelDownloadRow` but drives the presence-based
+/// `ASRModelManagerViewModel` (one model, downloaded/unloaded independently
+/// of the TTS engine so it only shares memory during the read-along recognize
+/// step).
+private struct ASRModelDownloadRow: View {
+    var viewModel: ASRModelManagerViewModel
+    let onDelete: () -> Void
+
+    private var status: ASRModelManagerViewModel.Status {
+        viewModel.status
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .center, spacing: 8) {
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Image(systemName: "waveform")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(AppTheme.preferences)
+                        .accessibilityHidden(true)
+                    Text(viewModel.model?.name ?? "语音识别模型")
+                        .font(.callout.weight(.semibold))
+                        .lineLimit(1)
+                }
+                .layoutPriority(1)
+
+                Spacer(minLength: 6)
+
+                HStack(spacing: 5) {
+                    statusGlyph
+                    Text(statusLabel)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(statusColor)
+                        .lineLimit(1)
+                        .accessibilityIdentifier("settings_asrPackageStatus")
+                }
+                .frame(width: 94, alignment: .leading)
+
+                actionButton
+                    .frame(width: 88, alignment: .trailing)
+            }
+
+            if let detail = detailText {
+                Text(detail)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+
+            downloadProgress
+        }
+        .padding(.vertical, 5)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("settings_asrModelRow")
+    }
+
+    @ViewBuilder
+    private var actionButton: some View {
+        switch status {
+        case .unavailable, .checking:
+            ProgressView()
+                .controlSize(.small)
+        case .notDownloaded:
+            HoverableActionButton(title: "下载") {
+                Task { await viewModel.download() }
+            }
+            .help(downloadHelp)
+            .accessibilityIdentifier("settings_asrDownload")
+        case .downloading:
+            HoverableActionButton(title: "取消") {
+                viewModel.cancelDownload()
+            }
+            .accessibilityIdentifier("settings_asrCancel")
+        case .repairAvailable:
+            HoverableActionButton(title: "修复", tint: .orange) {
+                Task { await viewModel.download() }
+            }
+            .accessibilityIdentifier("settings_asrRepair")
+        case .downloaded:
+            HoverableActionButton(title: "删除", tint: .red) {
+                onDelete()
+            }
+            .accessibilityIdentifier("settings_asrDelete")
+        }
+    }
+
+    @ViewBuilder
+    private var statusGlyph: some View {
+        switch status {
+        case .unavailable, .checking, .downloading:
+            ProgressView()
+                .controlSize(.mini)
+        case .downloaded:
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(Color.green)
+                .imageScale(.small)
+        case .notDownloaded:
+            Image(systemName: "arrow.down.circle")
+                .foregroundStyle(.secondary)
+                .imageScale(.small)
+        case .repairAvailable:
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(.orange)
+                .imageScale(.small)
+        }
+    }
+
+    private var statusLabel: String {
+        switch status {
+        case .unavailable:
+            return "不可用"
+        case .checking:
+            return "检查中"
+        case .notDownloaded:
+            return "未安装"
+        case .downloading(let progress):
+            switch progress.phase {
+            case .downloading: return "下载中"
+            case .interrupted: return "已中断"
+            case .resuming: return "恢复中"
+            case .verifying: return "校验中"
+            case .installing: return "安装中"
+            }
+        case .repairAvailable:
+            return "需修复"
+        case .downloaded:
+            return "就绪"
+        }
+    }
+
+    private var statusColor: Color {
+        switch status {
+        case .downloaded:
+            return .green
+        case .repairAvailable:
+            return .orange
+        default:
+            return .secondary
+        }
+    }
+
+    private var detailText: String? {
+        switch status {
+        case .downloading(let progress):
+            return viewModel.downloadDetail(for: progress)
+        case .notDownloaded(let message), .repairAvailable(_, let message):
+            if let message { return message }
+            return sizeDetail
+        case .downloaded:
+            return sizeDetail
+        case .checking, .unavailable:
+            return nil
+        }
+    }
+
+    private var sizeDetail: String? {
+        viewModel.sizeText
+    }
+
+    private var downloadHelp: String {
+        if let size = viewModel.sizeText {
+            return "下载 \(size)"
+        }
+        return "下载"
+    }
+
+    @ViewBuilder
+    private var downloadProgress: some View {
+        if case .downloading(let progress) = status,
+           let total = progress.totalBytes,
+           total > 0 {
+            ProgressView(value: Double(progress.downloadedBytes), total: Double(total))
+                .progressViewStyle(.linear)
+                .tint(AppTheme.statusProgressTint)
+                .accessibilityIdentifier("settings_asrDownloadProgress")
         }
     }
 }
